@@ -1,0 +1,177 @@
+.titulo {
+    margin: 1vh;
+    font-family: "Ubuntu", sans-serif;
+    font-weight: 300;
+    font-size: 10vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.cerrarSesion {
+    position: absolute;
+    right: 0;
+    display: flex;
+    align-items: center;
+}
+
+.cerrarSesion .btn-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.custom-dropdown {
+    background: none;
+    border: none;
+    font-size: 2vh;
+    display: flex;
+    align-items: center;
+}
+
+.custom-dropdown::after {
+    display: none;
+}
+
+.user-img {
+    width: 5vh;
+    height: 5vh;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.tarea {
+    max-width: 40vh;
+    max-height: 50vh;
+    border: 3px solid rgb(105, 105, 105);
+    border-radius: 1vh;
+    padding: 1vh;
+    word-wrap: break-word;
+    /* Ajusta las palabras largas dentro del contenedor */
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    transition: .5s ease;
+
+}
+
+.tarea:hover{
+    position: relative;
+    border-color: black;
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+}
+
+
+.imagenes {
+    max-height: 7vh;
+    width: auto;
+    margin-top: auto;
+}
+
+.imagenes img {
+    height: 100%;
+    width: auto;
+    object-fit: contain;
+    margin-top: auto;
+
+    cursor: pointer;
+}
+
+
+.fondoModal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, .5);
+    z-index: 2;
+
+}
+
+.divModal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+
+    max-width: 80vh;
+    max-height: 75vh;
+    border-radius: 2vh;
+    transform: translate(-50%, -50%);
+    background: white;
+    z-index: 3;
+}
+
+
+.inputData {
+    border: 1px solid rgb(179, 179, 179);
+    border-radius: 1vh;
+    text-align: center;
+    transition: .3s ease;
+}
+
+
+.inputData:hover {
+    border: 1px solid rgb(143, 143, 143);
+}
+
+.inputData:focus {
+    border: 2px solid rgb(0, 140, 255);
+}
+
+.inputTex {
+    width: 65vh;
+    height: 25vh;
+    margin: 1vh;
+    transition: .5s ease;
+
+}
+
+.inputTex:hover {
+    border: 1px solid rgb(143, 143, 143);
+}
+
+.visible {
+    opacity: 0;
+    animation: hacerVisible .5s forwards;
+}
+
+.rectB {
+    width: 4vh;
+    height: 2vh;
+    background-color: rgba(0, 128, 0, 0.3);
+    margin-right: 1vh;
+    border: 2px solid black;
+    border-radius: 1vh;
+}
+
+.rectM {
+    width: 4vh;
+    height: 2vh;
+    background-color: rgba(255, 255, 0, 0.3);
+    margin-right: 1vh;
+    border: 2px solid black;
+    border-radius: 1vh;
+}
+
+.rectA {
+    width: 4vh;
+    height: 2vh;
+    background-color: rgba(255, 0, 0, 0.3);
+    margin-right: 1vh;
+    border: 2px solid black;
+    border-radius: 1vh;
+}
+
+
+
+@keyframes hacerVisible {
+    to {
+        opacity: 1;
+    }
+}

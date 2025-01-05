@@ -37,3 +37,15 @@ QuickTask es una aplicación web diseñada para gestionar tareas de manera efici
 * Refactorización del proyecto: División del código en múltiples componentes para mejorar la organización y mantenibilidad.
 * Modal interactivo: Uso de React-Bootstrap para añadir un modal de confirmación antes de eliminar tareas.
 * Efectos visuales mejorados: Las tarjetas de tareas se elevan al pasar el cursor por encima, ofreciendo una experiencia de usuario más atractiva.
+
+**Versión 3.0**
+
+* **Integración de Laravel como backend**:
+    - La aplicación ahora cuenta con un backend completo desarrollado con Laravel, que se comunica con React a través de una REST API.
+    - Se han implementado endpoints para la gestión de tareas y usuarios.
+* **Autenticación de usuarios**:
+    - Se añadió la funcionalidad de registro e inicio de sesión de usuarios.
+    - Se utiliza JWT (JSON Web Token) para gestionar la autenticación y proteger las rutas del backend.
+* **Persistencia en base de datos**:
+    - Todas las tareas y los usuarios se almacenan en una base de datos MySQL.
+    - Las tareas ahora se guardan en el backend en lugar de LocalStorage.
