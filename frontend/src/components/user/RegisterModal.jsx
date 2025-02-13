@@ -10,7 +10,7 @@ import axios from 'axios';
 
 import Cookies from 'js-cookie';
 
-
+import { BASE_URL } from '../../config';
 
 const RegisterModal = ({ setIsAuthenticated }) => {
 
@@ -18,12 +18,8 @@ const RegisterModal = ({ setIsAuthenticated }) => {
   const [pass, setPass] = useState('');
   const [confirmPass, setConfirmPass] = useState('');
   const [user, setUser] = useState('');
-
   const [error, setError] = useState('');
-
   const navigate = useNavigate();
-
-
 
   const comprobar = async () => {
     if (!email || !pass) {
@@ -34,24 +30,20 @@ const RegisterModal = ({ setIsAuthenticated }) => {
 
     } else {
       try {
-        const response = await axios.post('http://127.0.0.1:8000/api/registro', {
+        const response = await axios.post(`${BASE_URL}registro`, {
           'name': user,
           'email': email,
           'password': pass
         });
 
-        console.log(response.data);
         if (response.data.status) {
-          Cookies.set('user_name', user, { secure: true, sameSite: 'Strict' });
-          Cookies.set('auth_token', response.data.token, { secure: true, sameSite: 'Strict' });
+          Cookies.set('auth_token', response.data.token, { secure: true, sameSite: 'none' });
           toast.success(response.data.msg, { position: "top-right", autoClose: 3000 });
           setIsAuthenticated(true);
           navigate('/tasks');
         } else {
           toast.error(response.data.msg, { position: "top-right", autoClose: 3000, });
-
         }
-
       } catch (error) {
         setError('Error al conectar con el servidor.');
         console.error(error);
@@ -88,8 +80,8 @@ const RegisterModal = ({ setIsAuthenticated }) => {
                 <input type="password" id='pass2' className='input' placeholder='****' onChange={(e) => setConfirmPass(e.target.value)} autoComplete="new-password"/>
               </div>
             </div>
-            <div className='divRegister'>
-              <button type='button' className='btn btn-outline-success ' onClick={comprobar}>Registrarse</button>
+            <div className='divBtnRegister'>
+              <button type='button' className='btn btn-outline-dark ' onClick={comprobar}>Registrarse</button>
             </div>
 
           </div>

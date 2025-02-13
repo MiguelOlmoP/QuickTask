@@ -23,39 +23,73 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 */
 
+/*
+    Google OAuth
+*/
+
+import { GoogleOAuthProvider } from '@react-oauth/google';
+
+import Cookies from 'js-cookie';
+
 import axios from 'axios';
 
+import { BASE_URL, GOOGLE_ID } from './config.js';
 
 
 function App() {
-
+ 
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isLoading, setIsLoading] = useState(true); 
+
+  const [userName, setUserName] = useState("");
+
 
   useEffect(() => {
-    const checkSession = async () => {
-      try {
-        const response = await axios.get('http://127.0.0.1:8000/api/session');
-        setIsAuthenticated(response.data.authenticated);
-      } catch (error) {
-        console.error('Error al verificar la sesión:', error);
-        setIsAuthenticated(false);
-      }
-    };
-    checkSession();
-  }, []);
+    const token = Cookies.get('auth_token');
+    
+    if (token) {
+      setIsAuthenticated(true);
+
+      axios.get(`${BASE_URL}session`, {
+        headers: { 'Authorization': `Bearer ${token}`, }
+      })
+        .then((response) => {
+          if(response.data.status){
+            setUserName(response.data.userName.split(" ")[0]);
+          }
+        })
+        .catch((error) => {
+          console.error("Error obteniendo usuario:", error);
+          setIsAuthenticated(false);
+          setUserName(""); 
+        });
+
+    } else {
+      setIsAuthenticated(false); 
+    }
+
+    setIsLoading(false); 
+  }, [isAuthenticated]); 
+
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
 
   return (
-    <Router>
-      <ToastContainer />
-      <Routes>
-        <Route path="/" element={<Login setIsAuthenticated={setIsAuthenticated}/>} />
-        <Route path="/register" element={<Register setIsAuthenticated={setIsAuthenticated}/>} />
+    <GoogleOAuthProvider clientId={GOOGLE_ID}>
+      <Router>
+        <ToastContainer />
+        <Routes>
+          <Route path="/" element={<Login setIsAuthenticated={setIsAuthenticated} />} />
+          <Route path="/register" element={<Register setIsAuthenticated={setIsAuthenticated} />} />
 
-        <Route path="/tasks" element={isAuthenticated ? <TaskList  setIsAuthenticated={setIsAuthenticated} /> :  <Navigate to="/" />} />
-        <Route path="/modal" element={isAuthenticated ? <Modal /> : <Navigate to="/" />} />
-      </Routes>
-    </Router>
+          <Route path="/tasks" element={isAuthenticated ? <TaskList setIsAuthenticated={setIsAuthenticated} userName={userName} /> : <Navigate to="/" />} />
+          <Route path="/modal" element={isAuthenticated ? <Modal /> : <Navigate to="/" />} />
+        </Routes>
+      </Router>
+    </GoogleOAuthProvider>
   );
 }
 

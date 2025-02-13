@@ -13,20 +13,14 @@ import user from '../../assets/user.png';
 
 import { useNavigate } from "react-router-dom";
 
-
 import axios from 'axios';
 
-function TaskList({ setIsAuthenticated }) {
+import { BASE_URL } from '../../config';
 
-    const [username, setUsername] = useState('');
 
-    useEffect(() => {
-        const storedUsername = Cookies.get('user_name');
-        if (storedUsername) {
-            setUsername(storedUsername);
-        }
-    }, []);
+function TaskList({ setIsAuthenticated , userName}) {
 
+    const [error, setError] = useState('');
 
     const [modalOpen, setModalOpen] = useState(false);
     const [modalReact, setModalReact] = useState(false);
@@ -47,15 +41,15 @@ function TaskList({ setIsAuthenticated }) {
 
     const viewtask = async () => {
         try {
-             // Obtener el token de autenticación almacenado en las cookies
+            // Obtener el token de autenticación almacenado en las cookies
             const token = Cookies.get('auth_token');
-            const response = await axios.get('http://127.0.0.1:8000/api/taskList', {
+            const response = await axios.get(`${BASE_URL}taskList`, {
                 headers: {
-                     // Incluir el token JWT en las cabeceras de la solicitud para autenticar al usuario
-                    'Authorization': `Bearer ${token}`,
+                    // Incluir el token JWT en las cabeceras de la solicitud para autenticar al usuario
+                    'Authorization': `Bearer ${token}`,                   
                 }
             });
-             // Modificar los datos de las tareas para separar la fecha y la hora
+            // Modificar los datos de las tareas para separar la fecha y la hora
             const modifiedData = response.data.map(task => {
                 const [date, time] = task.fecha.split(' ');
                 return {
@@ -75,8 +69,6 @@ function TaskList({ setIsAuthenticated }) {
 
 
     const openModal = (task = null) => {
-
-        console.log(task);
 
         setTaskToEdit(task);
         setModalOpen(true);
@@ -101,24 +93,29 @@ function TaskList({ setIsAuthenticated }) {
 
     const cerrarSesion = async () => {
         try {
-            const response = await axios.post('http://127.0.0.1:8000/api/logout');
-            console.log(response.data.status);
-            if (response.data.status) {
+            const token = Cookies.get('auth_token');
+            const response = await axios.post(`${BASE_URL}logout`,{}, {
+                headers: {                    
+                    'Authorization': `Bearer ${token}`,                   
+                }
+            });
+            
+            if (response.data.status) {                
+                Cookies.remove('auth_token');
+                setIsAuthenticated(false);                
                 toast.success(response.data.msg, { position: "top-right", autoClose: 3000 });
-                Cookies.remove('user_name');
-                setIsAuthenticated(false);
-                navigate('/');
+               
             } else {
-                toast.error('Error al cerrar la sesión', { position: "top-right", autoClose: 3000 });
+                toast.error('1 Error al cerrar la sesión', { position: "top-right", autoClose: 3000 });
             }
         } catch (error) {
             console.error('Error al cerrar la sesión:', error);
-            toast.error('Error al conectar con el servidor', { position: "top-right", autoClose: 3000 });
+            toast.error('2 Error al conectar con el servidor', { position: "top-right", autoClose: 3000 });
         }
     };
 
     return (
-        <div className={'container-fluid'}>           
+        <div className={'container-fluid'}>
             <div className="container-fluid d-flex flex-column " >
                 <div className={`col-12 text-center`}>
                     <div className="titulo">
@@ -127,7 +124,7 @@ function TaskList({ setIsAuthenticated }) {
                             <div className="btn-group">
                                 <button className="btn dropdown-toggle custom-dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     <img src={imagenes.user} alt="user" className="user-img" />
-                                    {username}
+                                    {userName}
                                 </button>
                                 <ul className="dropdown-menu">
                                     <li>

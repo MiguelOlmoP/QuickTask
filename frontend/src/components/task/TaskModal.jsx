@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import DatePicker from 'react-datepicker';
-/*
-    Importa la funcion "v4" del paquete "uuid"
-    La funcion "v4" genera IDs únicos basados en el estandar UUID
-*/
-import { v4 as uuidv4 } from 'uuid';
+
 /*
     Notificaciones emergentes para mostrar mensajes en la interfaz de usuario de forma sencilla.
 */
@@ -21,6 +17,7 @@ import Cookies from 'js-cookie';
 
 import axios from 'axios';
 
+import { BASE_URL } from '../../config';
 
 
 function QuickTask({ closeModal, modalOpen, taskToEdit, arrayTask, setArrayDatos, modalReact, taskToRemove, closeModalR }) {
@@ -83,7 +80,6 @@ function QuickTask({ closeModal, modalOpen, taskToEdit, arrayTask, setArrayDatos
 
     useEffect(() => {
         if (taskToEdit) {
-            console.log(taskToEdit);
             // Cargar los datos de la tarea en los campos
             setTexto(taskToEdit.texto);
             setFecha(new Date(taskToEdit.fecha));
@@ -127,7 +123,7 @@ function QuickTask({ closeModal, modalOpen, taskToEdit, arrayTask, setArrayDatos
             // Editar tarea existente           
             if (event && event.id) {
                 try {
-                    const response = await axios.post(`http://127.0.0.1:8000/api/editTask`, {
+                    const response = await axios.post(`${BASE_URL}editTask`, {
                         'fecha': fechaSeleccionada.toLocaleString('sv-SE'),
                         'prioridad': prioridad,
                         'texto': texto,
@@ -156,7 +152,7 @@ function QuickTask({ closeModal, modalOpen, taskToEdit, arrayTask, setArrayDatos
             } else {
                 //Tarea nueva
                 try {
-                    const response = await axios.post(`http://127.0.0.1:8000/api/newTask`, {
+                    const response = await axios.post(`${BASE_URL}newTask`, {
                         'fecha': fechaSeleccionada.toLocaleString('sv-SE'),
                         'prioridad': prioridad,
                         'texto': texto
@@ -203,7 +199,7 @@ function QuickTask({ closeModal, modalOpen, taskToEdit, arrayTask, setArrayDatos
                 console.error('No se encontró el token de autenticación.');
                 return;
             }
-            const response = await axios.delete(`http://127.0.0.1:8000/api/delete/${event}`, {
+            const response = await axios.delete(`${BASE_URL}delete/${event}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                 },
@@ -219,11 +215,8 @@ function QuickTask({ closeModal, modalOpen, taskToEdit, arrayTask, setArrayDatos
         } catch (error) {
             console.error('Error al eliminar tarea:', error);
         }
-
         let newArrayDatos = arrayTask.filter((task) => task.id !== event);
-
         setArrayDatos(newArrayDatos);
-
         setTimeout(() => {
             closeModalR();
         }, 1000);

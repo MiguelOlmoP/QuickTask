@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 /*
 
 */
@@ -11,11 +11,14 @@ import { Link } from "react-router-dom";
 
 import Cookies from 'js-cookie';
 
+import { GoogleLogin } from '@react-oauth/google';
 
-const LoginModal = ({ setIsAuthenticated }) => {
+import { BASE_URL, GOOGLE_ID } from '../../config';
 
-  const [email, setEmail] = useState('');
-  const [pass, setPass] = useState('');
+const LoginModal = ({setIsAuthenticated}) => {
+
+  const [email, setEmail] = useState('prueba@gmail.com');
+  const [pass, setPass] = useState('prueba123');
 
   const [error, setError] = useState('');
 
@@ -26,21 +29,18 @@ const LoginModal = ({ setIsAuthenticated }) => {
       toast.error(`Por favor, escriba el ${!email ? "usuario" : "password"}`, { position: "top-right", autoClose: 3000, });
     } else {
       try {
-        const response = await axios.post('http://127.0.0.1:8000/api/login', {          
+        const response = await axios.post(`${BASE_URL}login`, {
           'email': email,
           'password': pass
         });
 
         if (response.data.status) {
           toast.success(response.data.msg, { position: "top-right", autoClose: 3000 });
-          
-          Cookies.set('user_name', response.data.user_name, { secure: true, sameSite: 'Strict' });
-          Cookies.set('auth_token', response.data.token, {secure: true, sameSite: 'Strict'});
+          Cookies.set('auth_token', response.data.token, { secure: true, sameSite: 'none' });
           setIsAuthenticated(true);
           navigate('/tasks');
         } else {
           toast.error(response.data.msg, { position: "top-right", autoClose: 3000, });
-
         }
 
       } catch (error) {
@@ -49,6 +49,38 @@ const LoginModal = ({ setIsAuthenticated }) => {
       }
     }
   }
+
+  /**
+   *  funciones de Google
+   * 
+   */
+  const loginGoogle = async (event) => {
+    try {
+      const response = await axios.post(`${BASE_URL}loginGoogle`, {
+        'token': event.credential
+      });
+
+      if (response.data.status) {
+        toast.success(response.data.msg, { position: "top-right", autoClose: 3000 });
+
+        Cookies.set('auth_token', response.data.token, { secure: true, sameSite: 'none' });
+        setIsAuthenticated(true);
+        navigate('/tasks');
+      } else {
+        toast.error(response.data.msg, { position: "top-right", autoClose: 3000, });
+      }
+
+    } catch (error) {
+      setError('Error al iniciar sesión.');
+      console.error(error);
+    }
+  };
+
+
+  const errorGoogle = () => {
+    toast.error("Error al iniciar sesión con Google", { position: "top-right", autoClose: 3000, });
+    console.error('Error al iniciar sesión con Google');
+  };
 
   return (
     <div className='d-flex justify-content-center align-items-center vh-100 '>
@@ -61,11 +93,11 @@ const LoginModal = ({ setIsAuthenticated }) => {
               </div>
               <div className="divUser">
                 <label htmlFor="email"><strong>Email :</strong></label>
-                <input type="text" id='email' className='input' placeholder='Email'  onChange={(e) => setEmail(e.target.value)} autoComplete='off'/>
+                <input type="text" id='email' className='input' placeholder='Email' onChange={(e) => setEmail(e.target.value)} autoComplete='off' />
               </div>
               <div className="divPass">
                 <label htmlFor="pass"><strong>Password :</strong></label>
-                <input type="password" id='pass' className='input' placeholder='****' onChange={(e) => setPass(e.target.value)} autoComplete='off'/>
+                <input type="password" id='pass' className='input' placeholder='****' onChange={(e) => setPass(e.target.value)} autoComplete='off' />
               </div>
             </div>
             <div className='div'>
@@ -76,9 +108,15 @@ const LoginModal = ({ setIsAuthenticated }) => {
         </form>
 
         <div className="fondoRegister">
-
           <div className='google'>
-
+            <GoogleLogin
+              clientId={GOOGLE_ID}
+              theme="filled_black"
+              size=" large"
+              onSuccess={loginGoogle}
+              onError={errorGoogle}
+              cookiePolicy={"single_host_policy"}
+            />
           </div>
           <div className='divRegister'>
             <h1>Regístrate en <strong>QuickTask</strong> y empieza a gestionar tus tareas</h1>
