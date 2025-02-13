@@ -17,8 +17,8 @@ import { BASE_URL, GOOGLE_ID } from '../../config';
 
 const LoginModal = ({setIsAuthenticated}) => {
 
-  const [email, setEmail] = useState('prueba@gmail.com');
-  const [pass, setPass] = useState('prueba123');
+  const [email, setEmail] = useState('');
+  const [pass, setPass] = useState('');
 
   const [error, setError] = useState('');
 
