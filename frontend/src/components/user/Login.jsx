@@ -1,3 +1,4 @@
+import styles from "./styles/Login.module.css"
 import React, { useEffect, useState } from 'react'
 /*
 
@@ -15,10 +16,15 @@ import { GoogleLogin } from '@react-oauth/google';
 
 import { BASE_URL, GOOGLE_ID } from '../../config';
 
-const LoginModal = ({setIsAuthenticated}) => {
 
-  const [email, setEmail] = useState('');
-  const [pass, setPass] = useState('');
+
+
+
+
+const LoginModal = ({ setIsAuthenticated }) => {
+
+  const [email, setEmail] = useState('prueba@gmail.com');
+  const [pass, setPass] = useState('prueba123');
 
   const [error, setError] = useState('');
 
@@ -83,47 +89,47 @@ const LoginModal = ({setIsAuthenticated}) => {
   };
 
   return (
-    <div className='d-flex justify-content-center align-items-center vh-100 '>
-      <div className='fondoForm'>
-        <form className="form">
-          <div className='fondoLogin'>
-            <div className='inputForm'>
-              <div className='divTitulo'>
-                <h1>Ya soy parte de <strong>QuickTask</strong></h1>
+    <div className="user-page">
+      <div className='d-flex justify-content-center align-items-center vh-100 '>
+        <div className={styles.container}>
+          <form className={styles.form} onSubmit={(e) => { e.preventDefault(); comprobar(); }}>
+            <div className={styles["container-lg"]}>
+              <div className={styles["div-form"]}>
+                <div className={styles["div-title"]}>
+                  <h1>Ya soy parte de <strong>QuickTask</strong></h1>
+                </div>
+                <div className={styles["div-email"]}>
+                  <label htmlFor="email"><strong>Correo electrónico :</strong></label>
+                  <input type="email" id='email' className={styles.input} placeholder='Correo electrónico' onChange={(e) => setEmail(e.target.value)} autoComplete='off' />
+                </div>
+                <div className={styles["div-pass"]}>
+                  <label htmlFor="pass"><strong>Contraseña :</strong></label>
+                  <input type="password" id='pass' className={styles.input} placeholder='********' onChange={(e) => setPass(e.target.value)} autoComplete='off' />
+                </div>
               </div>
-              <div className="divUser">
-                <label htmlFor="email"><strong>Email :</strong></label>
-                <input type="text" id='email' className='input' placeholder='Email' onChange={(e) => setEmail(e.target.value)} autoComplete='off' />
+              <div className={styles["div-btn"]}>
+                <button type='submit' className={styles.btn}>Iniciar</button>
               </div>
-              <div className="divPass">
-                <label htmlFor="pass"><strong>Password :</strong></label>
-                <input type="password" id='pass' className='input' placeholder='****' onChange={(e) => setPass(e.target.value)} autoComplete='off' />
-              </div>
+
             </div>
-            <div className='div'>
-              <button type='button' className='btn btn-outline-primary' onClick={comprobar}>Iniciar</button>
+          </form>
+
+          <div className={styles["container-rg"] }>
+            <div className={styles.google}>
+              <GoogleLogin
+                clientId={GOOGLE_ID}
+                theme="filled_black"
+                size=" large"
+                onSuccess={loginGoogle}
+                onError={errorGoogle}
+                cookiePolicy={"single_host_policy"}
+              />
             </div>
-
+            <div className={styles["div-rg"]}>
+              <h1>Regístrate en <strong>QuickTask</strong> y empieza a gestionar tus tareas</h1>
+              <Link to="/register" className={styles.link} >Registrarme</Link>
+            </div>
           </div>
-        </form>
-
-        <div className="fondoRegister">
-          <div className='google'>
-            <GoogleLogin
-              clientId={GOOGLE_ID}
-              theme="filled_black"
-              size=" large"
-              onSuccess={loginGoogle}
-              onError={errorGoogle}
-              cookiePolicy={"single_host_policy"}
-            />
-          </div>
-          <div className='divRegister'>
-            <h1>Regístrate en <strong>QuickTask</strong> y empieza a gestionar tus tareas</h1>
-            <Link to="/register" className='btn btn-outline-dark linkRegister' >Regístrate</Link>
-          </div>
-
-
         </div>
       </div>
     </div>

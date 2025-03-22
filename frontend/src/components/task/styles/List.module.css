@@ -1,0 +1,272 @@
+.div-title {
+    font-family: "Ubuntu", sans-serif;
+    font-size: 5em;
+    background-color: rgba(0, 0, 0, 0.164);
+
+}
+
+.shiny-text {
+    font-size: 1em;
+    font-weight: bold;
+    padding: .2em;
+    color: #8a7d48a6;
+    background: linear-gradient(120deg,
+            rgb(201, 178, 76) 60%,
+            rgb(0, 0, 0) 90%,
+            rgb(201, 178, 76) 80%);
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    display: inline-block;
+    animation: shine 4s linear infinite;
+}
+
+
+
+.shiny-text.disabled {
+    animation: none;
+}
+
+/* Btn Añadir task */
+.div-btn {
+    width: 7em;
+    height: 7em;
+
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    overflow: hidden;
+
+}
+
+.btn-mas {
+    background: inherit;
+}
+
+.img {
+    width: 4em;
+    background-color: rgb(236, 219, 161);
+    border: 1px black solid;
+    border-radius: .5em;
+
+    cursor: pointer;
+    padding: .3em;
+}
+
+.img:hover {
+    width: 4.5em;
+    transition: .2s ease-in;
+}
+
+/* Menu lateral */
+.menu-hover-area {
+    width: 6em;
+    height: 100%;
+
+    position: fixed;
+    left: 0;
+    top: 0;
+    
+    z-index: 2;
+}
+
+.fondo-menu {
+    width: 6em;
+    height: 100%;
+
+
+    position: fixed;
+    left: 0;
+    top: 0;
+
+    background-color: rgb(202, 202, 202);
+
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: space-between;
+
+    z-index: 1;
+    transition: .5s ease-in;
+    padding: 1em 0;
+
+    overflow: hidden;
+}
+
+.menu {
+    width: 15em;
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+}
+
+.menu-title {
+    display: flex;
+    align-items: center;
+    justify-content: start;
+
+    padding: 1em;
+}
+
+.img-title {
+    width: 4em;
+
+    cursor: pointer;
+}
+
+.div-menu {
+
+    display: flex;
+    align-items: center;
+    justify-content: start;
+
+    padding: 1em;
+}
+
+.menu-letters {
+    padding: 1em;
+    visibility: hidden;
+    opacity: 0;
+    color: white;
+}
+
+.menu-btn {
+    background: inherit;
+}
+
+.div-btn-sesion {
+    margin-top: auto;
+    padding: 1em;
+}
+
+.menu-hover-area:hover .fondo-menu {
+    width: 15em;
+    transform: scaleX(1);
+    transition: .5s ease-in;
+
+    z-index: 3;
+}
+
+.fondo-menu:hover .menu-letters {
+    visibility: visible;
+    opacity: 1;
+    transition: .5s ease-in;
+}
+
+.div-menu:hover {
+    box-shadow: 0 0 0 1px white;
+    border-radius: 1em;
+    transition: .6s ease-in;
+}
+
+.div-btn-sesion:hover {
+    box-shadow: 0 0 0 1px white;
+    border-radius: 1em;
+    transition: .6s ease-in;
+}
+
+.container-task {
+    height: 100%;
+}
+
+.img-fondo {
+    height: 100%;
+}
+
+/* Rectangulos Prioridades */
+.div-rect {
+    padding-top: 2em;
+}
+
+.div-rect-b {
+    width: 4vh;
+    height: 2vh;
+    background-color: rgba(0, 128, 0, 0.3);
+    margin-right: 1vh;
+    border: 2px solid black;
+    border-radius: 1vh;
+}
+
+.div-rect-m {
+    width: 4vh;
+    height: 2vh;
+    background-color: rgba(255, 255, 0, 0.3);
+    margin-right: 1vh;
+    border: 2px solid black;
+    border-radius: 1vh;
+}
+
+.div-rect-a {
+    width: 4vh;
+    height: 2vh;
+    background-color: rgba(255, 0, 0, 0.3);
+    margin-right: 1vh;
+    border: 2px solid black;
+    border-radius: 1vh;
+}
+
+/* Filtro */
+.div-filtro{
+    padding-top: 2em;
+}
+
+.lb-filtro {
+    width: 6em;
+}
+
+.select-filtro{
+    width: 12em;
+}
+
+
+/*  Tareas  */
+.task {
+    border: 3px solid rgb(105, 105, 105);
+    border-radius: 1em;
+    word-wrap: break-word;
+    /* Ajusta las palabras largas dentro del contenedor */
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    transition: .5s ease;
+
+}
+
+.task:hover {
+    position: relative;
+    border-color: black;
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+}
+
+
+.div-img {
+    max-height: 7vh;
+    width: auto;
+    margin-top: auto;
+}
+
+.div-img img {
+    height: 100%;
+    width: auto;
+    object-fit: contain;
+    margin-top: auto;
+
+    cursor: pointer;
+}
+
+
+@keyframes shine {
+    0% {
+        background-position: 100%;
+    }
+
+    100% {
+        background-position: -100%;
+    }
+}

@@ -1,3 +1,4 @@
+import styles from "./styles/List.module.css"
 import React, { useEffect, useState } from 'react'
 import TaskModal from './TaskModal';
 import { toast } from "react-toastify";
@@ -6,10 +7,14 @@ import Cookies from 'js-cookie';
 
 
 // Imagenes
+import logo from '../../assets/logo.png';
 import papelera from '../../assets/papelera.png';
 import lapiz from '../../assets/lapiz.png';
 import quickTask from '../../assets/quickTask.png';
 import user from '../../assets/user.png';
+import cierre from '../../assets/cierre.png';
+import ajustes from '../../assets/ajustes.png';
+import mas from '../../assets/mas.png';
 
 import { useNavigate } from "react-router-dom";
 
@@ -18,7 +23,7 @@ import axios from 'axios';
 import { BASE_URL } from '../../config';
 
 
-function TaskList({ setIsAuthenticated , userName}) {
+function TaskList({ setIsAuthenticated, userName }) {
 
     const [error, setError] = useState('');
 
@@ -27,12 +32,25 @@ function TaskList({ setIsAuthenticated , userName}) {
     const [taskToEdit, setTaskToEdit] = useState(null);
     const [taskToRemove, setTaskToRemove] = useState(null);
     const [arrayDatos, setArrayDatos] = useState([]);
+    const [filtro, setFiltro] = useState("default");
+    const tareasFiltradas = [...arrayDatos];
+
+    if (filtro === "prioridad") {
+        const prioridadOrden = { "alta": 1, "media": 2, "baja": 3 };
+        tareasFiltradas.sort((a, b) => prioridadOrden[a.prioridad] - prioridadOrden[b.prioridad]);
+    } else if (filtro === "fecha") {
+        tareasFiltradas.sort((a, b) => new Date(a.fechaForm) - new Date(b.fechaForm));
+    }
 
     const imagenes = {
+        logo,
         papelera,
         lapiz,
         quickTask,
-        user
+        user,
+        cierre,
+        ajustes,
+        mas
     }
 
     useEffect(() => {
@@ -46,7 +64,7 @@ function TaskList({ setIsAuthenticated , userName}) {
             const response = await axios.get(`${BASE_URL}taskList`, {
                 headers: {
                     // Incluir el token JWT en las cabeceras de la solicitud para autenticar al usuario
-                    'Authorization': `Bearer ${token}`,                   
+                    'Authorization': `Bearer ${token}`,
                 }
             });
             // Modificar los datos de las tareas para separar la fecha y la hora
@@ -69,7 +87,6 @@ function TaskList({ setIsAuthenticated , userName}) {
 
 
     const openModal = (task = null) => {
-
         setTaskToEdit(task);
         setModalOpen(true);
     };
@@ -94,17 +111,17 @@ function TaskList({ setIsAuthenticated , userName}) {
     const cerrarSesion = async () => {
         try {
             const token = Cookies.get('auth_token');
-            const response = await axios.post(`${BASE_URL}logout`,{}, {
-                headers: {                    
-                    'Authorization': `Bearer ${token}`,                   
+            const response = await axios.post(`${BASE_URL}logout`, {}, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
                 }
             });
-            
-            if (response.data.status) {                
+
+            if (response.data.status) {
                 Cookies.remove('auth_token');
-                setIsAuthenticated(false);                
+                setIsAuthenticated(false);
                 toast.success(response.data.msg, { position: "top-right", autoClose: 3000 });
-               
+
             } else {
                 toast.error('1 Error al cerrar la sesión', { position: "top-right", autoClose: 3000 });
             }
@@ -114,35 +131,56 @@ function TaskList({ setIsAuthenticated , userName}) {
         }
     };
 
+
+    const ShinyText = ({ text, disabled = false, speed = 5, className = '' }) => {
+        const animationDuration = `${speed}s`;
+
+        return (
+            <div
+                className={`${styles["shiny-text"]} ${disabled ? 'disabled' : ''} ${className}`}
+                style={{ animationDuration }}
+            >
+                {text}
+            </div>
+        );
+    };
+
     return (
-        <div className={'container-fluid'}>
-            <div className="container-fluid d-flex flex-column " >
-                <div className={`col-12 text-center`}>
-                    <div className="titulo">
-                        <h1 translate='no'>QuickTask</h1>
-                        <div className="cerrarSesion">
-                            <div className="btn-group">
-                                <button className="btn dropdown-toggle custom-dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <img src={imagenes.user} alt="user" className="user-img" />
-                                    {userName}
-                                </button>
-                                <ul className="dropdown-menu">
-                                    <li>
-                                        <button className="dropdown-item" onClick={cerrarSesion}>Cerrar sesión</button>
-                                    </li>
-                                </ul>
-                            </div>
+
+        <div className={`d-flex flex-column ${styles["container"]} `}>
+                      <div className={styles["div-btn"]}>
+                <button className={styles["btn-mas"]} onClick={() => openModal()} >
+                    <img src={imagenes.mas} alt="Nueva Tarea" title="Nueva Tarea" className={styles.img} />
+                </button>
+            </div>
+
+            {/* Menú lateral */}
+            <div className={styles["menu-hover-area"]}>
+                <div className={styles["fondo-menu"]}>
+                    <div className={styles.menu}>
+                        <div className={styles["menu-title"]}>
+                            <img src={imagenes.logo} alt="user" title="Quicktask" className={styles["img-title"]} />
+                            <span className={styles["menu-letters"]}>Quicktask</span>
+                        </div>
+                        <div className={styles["div-menu"]}>
+                            <img src={imagenes.user} alt="user" title={userName} className={styles.img} />
+                            <span className={styles["menu-letters"]}>{userName}</span>
+                        </div>
+                        <div className={styles["div-menu"]}>
+                            <img src={imagenes.ajustes} alt="user" title="Ajustes" className={styles.img} />
+                            <a href="#" className={styles["menu-letters"]}> Ajustes</a>
+                        </div>
+                        <div className={styles["div-btn-sesion"]}>
+                            <button className={styles["menu-btn"]} onClick={cerrarSesion}>
+                                <img src={imagenes.cierre} alt="Cerrar sesión" title="Cerrar sesión" className={styles.img} />
+                                <span className={styles["menu-letters"]}>Cerrar sesión</span>
+                            </button>
                         </div>
                     </div>
-
-                    <hr />
-                    <div className="mt-3">
-                        <button type="button" className="btn btn-outline-primary m-1 " onClick={() => openModal()}>Nueva Tarea</button>
-                    </div>
-
                 </div>
             </div>
 
+            {/* Modal */}
             <TaskModal
                 closeModal={closeModal}
                 modalOpen={modalOpen}
@@ -154,37 +192,50 @@ function TaskList({ setIsAuthenticated , userName}) {
                 closeModalR={closeModalR}
             />
 
-            <div className="row justify-content-center mt-4 text-center">
+            <div className={`row justify-content-center text-center ${styles["container-task"]}`}>
 
                 {arrayDatos.length === 0 ? (
                     <>
-                        <div className="d-flex flex-column align-items-center">
+                        <div className={`d-flex justify-content-center ${styles["img-fondo"]}`}>
                             {/* <h1>No hay tareas ...</h1> */}
                             <img src={imagenes.quickTask} alt="quickTask" />
                         </div>
                     </>
                 ) : (
                     <>
-                        {/* Mostrar los rectángulos de prioridad arriba */}
-                        <div className="d-flex col-10 mb-3">
-                            <div className="d-flex align-items-center me-3">
-                                <div className="rectB" />
-                                <p className="mb-0"><strong>Baja</strong></p>
-                            </div>
+                        {/* Rectángulos de prioridad */}
+                        <div className="d-flex align-items-center flex-column flex-lg-row col-12 mb-3">
+                            <div className={`d-flex justify-content-center col-lg-6 col-12 ${styles["div-rect"]}`}>
+                                <div className="d-flex flex-column flex-lg-row align-items-center m-2">
+                                    <div className={styles["div-rect-b"]} />
+                                    <p className="mb-0"><strong>Baja</strong></p>
+                                </div>
 
-                            <div className="d-flex align-items-center me-3">
-                                <div className="rectM" />
-                                <p className="mb-0"><strong>Media</strong></p>
-                            </div>
+                                <div className="d-flex flex-column flex-lg-row align-items-center m-2">
+                                    <div className={styles["div-rect-m"]} />
+                                    <p className="mb-0"><strong>Media</strong></p>
+                                </div>
 
-                            <div className="d-flex align-items-center me-3">
-                                <div className="rectA" />
-                                <p className="mb-0"><strong>Alta</strong></p>
+                                <div className="d-flex flex-column flex-lg-row align-items-center m-2">
+                                    <div className={styles["div-rect-a"]} />
+                                    <p className="mb-0"><strong>Alta</strong></p>
+                                </div>
+                            </div>
+                            {/* Filtro */}
+                            <div className={`d-flex flex-column flex-lg-row align-items-center justify-content-center col-lg-6 col-12 ${styles["div-filtro"]}`}>
+                                <label htmlFor="filtro" className={`d-flex align-items-center justify-content-center form-label col-lg-6 col-12 ${styles["lb-filtro"]}`}><strong>Filtrar por :</strong></label>
+                                <select id="filtro" className={`d-flex align-items-center justify-content-center form-select col-lg-6 col-12 ${styles["select-filtro"]}`} value={filtro} onChange={(e) => setFiltro(e.target.value)} >
+                                    <option value="default">Ninguno</option>
+                                    <option value="prioridad">Prioridad (Alta-Baja)</option>
+                                    <option value="fecha">Fecha</option>
+                                </select>
                             </div>
                         </div>
 
-                        {arrayDatos.map((dato) => (
-                            <div key={dato.id} className={`col-10 col-md-5 col-lg-2 m-1 tarea`}
+
+                        {/* Task */}
+                        {tareasFiltradas.map((dato) => (
+                            <div key={dato.id} className={`col-6 col-md-6 col-lg-2 m-1 ${styles.task}`}
                                 style={{
                                     backgroundColor: dato.prioridad === "alta" ? "rgba(255, 0, 0, 0.3)" :
                                         dato.prioridad === "media" ? "rgba(255, 255, 0, 0.3)" : "rgba(0, 128, 0, 0.3)"
@@ -203,7 +254,7 @@ function TaskList({ setIsAuthenticated , userName}) {
                                     <p>{dato.texto}</p>
                                 </div>
 
-                                <div className="imagenes">
+                                <div className={styles["div-img"]}>
                                     <img src={imagenes.lapiz} alt="Editar" title="Editar" onClick={() => openModal(dato)} />
                                     <img src={imagenes.papelera} alt="Eliminar" title="Eliminar" onClick={() => openModalR(dato.id)} />
                                 </div>
@@ -214,6 +265,8 @@ function TaskList({ setIsAuthenticated , userName}) {
             </div>
 
         </div>
+
+
     )
 }
 

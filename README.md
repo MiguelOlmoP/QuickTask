@@ -82,6 +82,7 @@ QuickTask es una aplicación web diseñada para gestionar tareas de manera efici
         + La fecha de la tarea debe ser posterior a la fecha actual.
         + No se permite guardar tareas sin texto en el campo de descripción.
 
+
 **Versión 2.0**
 
 * Refactorización del proyecto: División del código en múltiples componentes para mejorar la organización y mantenibilidad.
@@ -91,18 +92,37 @@ QuickTask es una aplicación web diseñada para gestionar tareas de manera efici
 
 **Versión 3.0**
 
-* **Integración de Laravel como backend**:
+* **Integración de Laravel como backend :**
     - La aplicación ahora cuenta con un backend completo desarrollado con Laravel, que se comunica con React a través de una REST API.
     - Se han implementado endpoints para la gestión de tareas y usuarios.
-* **Autenticación de usuarios**:
+* **Autenticación de usuarios :**
     - Se añadió la funcionalidad de registro e inicio de sesión de usuarios.
     - Se utiliza JWT (JSON Web Token) para gestionar la autenticación y proteger las rutas del backend.
-* **Persistencia en base de datos**:
+* **Persistencia en base de datos :**
     - Todas las tareas y los usuarios se almacenan en una base de datos MySQL.
     - Las tareas ahora se guardan en el backend en lugar de LocalStorage.
+
 
 **Versión 4.0**
 
 * Implementación del inicio de sesión mediante Google para facilitar el registro e inicio de sesión.
 * Se añadió el archivo "config.js" en el frontend para gestionar la URL base y el ID público de Google.
 * Autenticación simplificada con JWT, eliminando la combinación con la sesión para mejorar la seguridad.
+
+
+**Versión 5.0**
+
+* **Refactorización de estilos :**
+    - Se eliminaron los archivos CSS globales y se crearon archivos `module.css` específicos para cada componente.
+
+* **Animaciones mejoradas :**
+    - Se añadieron animaciones a los botones y al texto del modal de "Crear/Modificar tareas" para mejorar la experiencia de usuario.
+
+* **Nuevo sistema de filtrado :**
+    - Ahora es posible filtrar las tareas por fecha o por prioridad (de mayor a menor).
+
+* **Actualización de iconos :**
+    - Se añadieron nuevos iconos para mejorar la interfaz visual de la aplicación.
+    - Fuentes de los iconos:
+      - [Icono de cierre de sesion de Freepik](https://www.freepik.es/icono/desconectar_5949662)
+      - [Icono de ajustes de Freepik](https://www.freepik.es/icono/engranaje_16600271#fromView=search&page=1&position=7&uuid=6c0c0cf7-7351-43f2-9ab5-ba14e6b24361)

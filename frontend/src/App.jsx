@@ -1,6 +1,4 @@
 import './App.css';
-import "./components/task/taskStyles.css";
-import "./components/user/userStyles.css";
 
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 
@@ -37,16 +35,16 @@ import { BASE_URL, GOOGLE_ID } from './config.js';
 
 
 function App() {
- 
+
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isLoading, setIsLoading] = useState(true); 
+  const [isLoading, setIsLoading] = useState(true);
 
   const [userName, setUserName] = useState("");
 
 
   useEffect(() => {
     const token = Cookies.get('auth_token');
-    
+
     if (token) {
       setIsAuthenticated(true);
 
@@ -54,22 +52,24 @@ function App() {
         headers: { 'Authorization': `Bearer ${token}`, }
       })
         .then((response) => {
-          if(response.data.status){
-            setUserName(response.data.userName.split(" ")[0]);
+          if (response.data.status) {
+            let firstName = response.data.userName.split(" ")[0];
+            firstName = firstName.charAt(0).toUpperCase() + firstName.slice(1);
+            setUserName(firstName);
           }
         })
         .catch((error) => {
           console.error("Error obteniendo usuario:", error);
           setIsAuthenticated(false);
-          setUserName(""); 
+          setUserName("");
         });
 
     } else {
-      setIsAuthenticated(false); 
+      setIsAuthenticated(false);
     }
 
-    setIsLoading(false); 
-  }, [isAuthenticated]); 
+    setIsLoading(false);
+  }, [isAuthenticated]);
 
 
   if (isLoading) {

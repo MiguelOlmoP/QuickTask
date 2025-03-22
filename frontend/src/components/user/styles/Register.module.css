@@ -1,0 +1,96 @@
+
+
+.container {
+    position: relative;
+    max-width: 100vh;
+    max-height: 90vh;
+
+    background-color: hsl(51, 90%, 80%);
+    border-radius: 2vh;
+
+    box-shadow: 0 10px 16px rgba(110, 110, 105, 0.76);
+    overflow: hidden;
+}
+
+.container-img {
+    max-width: 5.4vh;
+    max-height: 5.4vh;
+
+    padding-top: 1em;
+}
+
+
+.div-rg {
+    width: 100%;
+    padding: 3vh;
+}
+
+.div-form{
+    text-align: center;
+}
+
+.div-title {
+    font-size: 2rem;
+    text-align: center;
+    padding-bottom: .3em;
+}
+
+.div{
+   padding: 1em;
+}
+
+.lb{
+    padding: .6em;
+}
+
+.input {
+    text-align: center;
+    border: solid 1px black;
+    border-radius: 1vh;
+}
+
+.div-btn {
+    padding-top: 2em;
+}
+
+
+.btn {
+    width: 8em;
+    height: 2.7em;
+    background: var(--negro);
+    color: white;
+    border: .3px solid var(--negro);
+    border-radius: .5em;
+    font-weight: bold;
+    cursor: pointer;
+    position: relative;
+
+    overflow: hidden;
+    z-index: 1;
+}
+
+.btn:hover {
+    color: var(--negro);
+}
+
+.btn:after {
+    left: -20%;
+    right: -20%;
+    top: -5%;
+    bottom: -5%;
+    position: absolute;
+
+    background: var(--grisClaro);
+    content: "";
+
+    transform: skewX(-45deg) scale(0, 1);
+    transition: all 0.5s;
+
+    z-index: -1;
+}
+
+.btn:hover:after {
+    transform: skewX(-45deg) scale(1, 1);
+    -webkit-transition: all 0.5s;
+    transition: all 0.5s;
+}

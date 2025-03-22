@@ -1,4 +1,6 @@
-import React, { useState } from 'react'
+import styles from "./styles/Register.module.css";
+
+import React, { useState } from 'react';
 
 import { toast } from "react-toastify";
 
@@ -22,11 +24,14 @@ const RegisterModal = ({ setIsAuthenticated }) => {
   const navigate = useNavigate();
 
   const comprobar = async () => {
-    if (!email || !pass) {
-      toast.error(`Por favor, escriba el ${!email ? "usuario" : "password"}`, { position: "top-right", autoClose: 3000, });
+    if (!user || !email || !pass) {
+      toast.error(`Por favor, escriba ${!user ? "el nombre de usuario" : !email ? "el correo electrónico" : "la contraseña"}`, { position: "top-right", autoClose: 3000, });
+
+    } else if(pass.length < 7){
+      toast.error(`La contraseña debe tener al menos 7 caracteres`, { position: "top-right", autoClose: 3000, });
 
     } else if (pass != confirmPass) {
-      toast.error(`Las contraseñas no coinciden"`, { position: "top-right", autoClose: 3000, });
+      toast.error(`Las contraseñas no coinciden`, { position: "top-right", autoClose: 3000, });
 
     } else {
       try {
@@ -52,41 +57,51 @@ const RegisterModal = ({ setIsAuthenticated }) => {
   }
 
   return (
-    <div className='d-flex justify-content-center align-items-center vh-100 '>
-      <div className='fondoForm'>
-        <div className='fondoFlecha'>
-          <Link to="/" ><img src="/flecha.png" alt="Atras" /></Link>
-        </div>
-        <form action="" className="form">
-          <div className='register'>
-            <div className='inputForm'>
-              <div className='divTituloR'>
-                <h1>Regístrate en <strong>QuickTask</strong> y empieza a gestionar tus tareas</h1>
-              </div>
-              <div className="divUser">
-                <label htmlFor="user"><strong>User :</strong></label>
-                <input type="text" id='user' className='input' placeholder='User' onChange={(e) => setUser(e.target.value)} autoComplete="off"/>
-              </div>
-              <div className="divEmail">
-                <label htmlFor="email"><strong>Email :</strong></label>
-                <input type="text" id='email' className='input' placeholder='Email' onChange={(e) => setEmail(e.target.value)} autoComplete="off"/>
-              </div>
-              <div className="divPass">
-                <label htmlFor="pass"><strong>Password :</strong></label>
-                <input type="password" id='pass' className='input' placeholder='****' onChange={(e) => setPass(e.target.value)} autoComplete="off"/>
-              </div>
-              <div className="divPass">
-                <label htmlFor="pass2"><strong>Repite Password :</strong></label>
-                <input type="password" id='pass2' className='input' placeholder='****' onChange={(e) => setConfirmPass(e.target.value)} autoComplete="new-password"/>
-              </div>
-            </div>
-            <div className='divBtnRegister'>
-              <button type='button' className='btn btn-outline-dark ' onClick={comprobar}>Registrarse</button>
-            </div>
+    <div className="user-page">
 
+      <div className='d-flex justify-content-center align-items-center vh-100 '>
+        <div className={styles.container}>
+          <div className="row w-100">
+            <div className={`col-12 ms-3  ${styles['container-img']}`}>
+              <Link to="/" ><img src="/flecha.png" alt="Atras" /></Link>
+            </div>
           </div>
-        </form>
+          <form className={styles.form} onSubmit={(e) => { e.preventDefault(); comprobar(); }}>
+            <div className={`d-flex flex-column justify-content-center align-items-center ${styles["div-rg"]}`}>
+              <div className={`row ${styles["div-form"]}`}>
+                <div className={`col-12 ${styles["div-title"]}`}>
+                  <h1>Regístrate en <strong>QuickTask</strong> y empieza a gestionar tus tareas</h1>
+                </div>
+                <div className="col-sm-6 ">
+                  <div className={styles.div}>
+                    <label htmlFor="user" className={styles.lb}><strong>Nombre de usuario :</strong></label>
+                    <input type="text" id='user' className={styles.input} placeholder='Nombre de usuario' onChange={(e) => setUser(e.target.value)} autoComplete="off" />
+                  </div>
+                  <div className={styles.div}>
+                    <label htmlFor="email" className={styles.lb}><strong>Correo electrónico :</strong></label>
+                    <input type="email" id='email' className={styles.input} placeholder='Correo electrónico' onChange={(e) => setEmail(e.target.value)} autoComplete="off" />
+                  </div>
+                </div>
+                <div className="col-sm-6 ">
+                  <div className={styles.div}>
+                    <label htmlFor="pass" className={styles.lb}><strong>Contraseña :</strong></label>
+                    <input type="password" id='pass' className={styles.input} placeholder='******' onChange={(e) => setPass(e.target.value)} autoComplete="off" />
+                  </div>
+                  <div className={styles.div}>
+                    <label htmlFor="pass2" className={styles.lb}><strong>Repite Contraseña :</strong></label>
+                    <input type="password" id='pass2' className={styles.input} placeholder='******' onChange={(e) => setConfirmPass(e.target.value)} autoComplete="new-password" />
+                  </div>
+                </div>
+              </div>
+              <div className={styles["div-btn"]}>
+                <button type='submit' className={styles.btn} >Crear Cuenta</button>
+              </div>
+
+            </div>
+          </form>
+        </div>
       </div>
+
     </div>
   )
 }

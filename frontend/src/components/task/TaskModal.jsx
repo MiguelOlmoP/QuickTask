@@ -1,3 +1,4 @@
+import styles from "./styles/Modal.module.css"
 import React, { useEffect, useState } from 'react';
 import DatePicker from 'react-datepicker';
 
@@ -244,44 +245,47 @@ function QuickTask({ closeModal, modalOpen, taskToEdit, arrayTask, setArrayDatos
 
             {/* Formulario de edición o creación de tarea */}
             {modalOpen && (
-                <div className="fondoModal visible" onClick={closeModal} >
-                    <div className="divModal" onClick={(e) => e.stopPropagation()}>
-                        <form className="contenidoModal">
+                <div className={styles.container} onClick={closeModal} >
+                    <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
+                        <form className={styles.form}>
                             <div className={`container`}>
                                 <div className={`row `}>
-                                    <div className={`col-12 text-center titulo m-2`}>
-                                        <h1 translate='no'>QuickTask</h1>
+                                    <div className={`col-12 text-center  ${styles["div-title"]}`}>
+                                        <span className={styles["shiny-text"]}>QuickTask</span>
                                     </div>
-                                    <div className="col-6 d-flex justify-content-center align-items-center ">
-                                        <div className=" m-1">
-                                            <span >Fecha y hora:</span>
-                                        </div>
-                                        <DatePicker className="inputData" showTimeSelect timeFormat="HH:mm"
-                                            dateFormat="dd/MM/yyyy HH:mm" timeIntervals={1} selected={fechaSeleccionada} onChange={comparar}
-                                            placeholderText={fechaDefaultFormatted} />
-                                    </div>
-
-                                    <div className="col-6 d-flex justify-content-center align-items-center  ">
-                                        <div className=" m-1 ">
-                                            <label id="prioridad" className="prioridad">Prioridad:</label>
+                                    <div className={`d-flex flex-column flex-lg-row justify-content-center align-items-center col-12 ${styles["div-data-text"]} `}>
+                                        <div className="d-flex flex-column flex-lg-row justify-content-center align-items-center col-6 ">
+                                            <div className=" m-1 ">
+                                                <span >Fecha y hora:</span>
+                                            </div>
+                                            <DatePicker className={styles.data} showTimeSelect timeFormat="HH:mm"
+                                                dateFormat="dd/MM/yyyy HH:mm" timeIntervals={1} selected={fechaSeleccionada} onChange={comparar}
+                                                placeholderText={fechaDefaultFormatted} />
                                         </div>
 
-                                        <Select
-                                            options={opciones}
-                                            value={opciones.find(option => option.value === prioridad)}
-                                            styles={customStyles}
-                                            onChange={(selectedOption) => setPrioridad(selectedOption.value)}
-                                        />
+                                        <div className="d-flex flex-column flex-lg-row justify-content-center align-items-center col-6  mt-2">
+                                            <div className=" m-1 ">
+                                                <label id="prioridad" className="prioridad">Prioridad:</label>
+                                            </div>
+
+                                            <Select
+                                                options={opciones}
+                                                value={opciones.find(option => option.value === prioridad)}
+                                                styles={customStyles}
+                                                onChange={(selectedOption) => setPrioridad(selectedOption.value)}
+                                            />
+                                        </div>
                                     </div>
+
                                     <div className="form-group col-12 d-flex justify-content-center ">
-                                        <textarea id="inputText" maxLength={500} className={`form-control inputTex`}
+                                        <textarea id="inputText" maxLength={500} className={`form-control ${styles.text}`}
                                             placeholder="Texto de ejemplo..." value={texto} onChange={cambiarTexto}></textarea>
                                     </div>
                                 </div>
                             </div>
-                            <div className="d-flex justify-content-center col-12 text-center ">
-                                <button type="button" className="btn btn-outline-secondary m-1" onClick={closeModal}> Cerrar </button>
-                                <button type="button" className="btn btn-outline-primary m-1 " onClick={changeStateModal}> Guardar </button>
+                            <div className={`d-flex justify-content-center col-12 text-center ${styles["div-btn"]}`}>
+                                <button type="button" className={`m-2 ${styles["btn-close"]}`} onClick={closeModal}> Cerrar </button>
+                                <button type="button" className={`m-2 ${styles["btn-save"]}`} onClick={changeStateModal}> Guardar </button>
                             </div>
 
                         </form>
