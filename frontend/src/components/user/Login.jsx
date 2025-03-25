@@ -16,11 +16,6 @@ import { GoogleLogin } from '@react-oauth/google';
 
 import { BASE_URL, GOOGLE_ID } from '../../config';
 
-
-
-
-
-
 const LoginModal = ({ setIsAuthenticated }) => {
 
   const [email, setEmail] = useState('');
@@ -33,6 +28,8 @@ const LoginModal = ({ setIsAuthenticated }) => {
   const comprobar = async () => {
     if (!email || !pass) {
       toast.error(`Por favor, escriba el ${!email ? "usuario" : "password"}`, { position: "top-right", autoClose: 3000, });
+    } else if (pass.length < 7) {
+      toast.error("La contraseña debe tener al menos 7 caracteres.", { position: "top-right", autoClose: 3000 });
     } else {
       try {
         const response = await axios.post(`${BASE_URL}login`, {
@@ -50,8 +47,18 @@ const LoginModal = ({ setIsAuthenticated }) => {
         }
 
       } catch (error) {
-        setError('Error al conectar con el servidor.');
-        console.error(error);
+        if (error.response) {
+          if (error.response.status === 422) {
+            toast.error("Por favor, corrige los errores en el formulario", { position: "top-right", autoClose: 3000, });
+            setError('Error de validación');
+            console.error(error);
+          }
+        } else {
+          toast.error("Error de conexión", { position: "top-right", autoClose: 3000, });
+          setError('Error de conexión');
+          console.error(error);
+        }
+
       }
     }
   }
@@ -77,7 +84,15 @@ const LoginModal = ({ setIsAuthenticated }) => {
       }
 
     } catch (error) {
-      setError('Error al iniciar sesión.');
+      if (error.response) {
+        if (error.response.status === 422) {
+          setError("Error de validación: Token inválido o no enviado.");
+          toast.error("Error de validación", { position: "top-right" });
+        }
+      } else {
+        setError("Ocurrió un error inesperado.");
+        toast.error("Ocurrió un error inesperado.", { position: "top-right" });
+      }
       console.error(error);
     }
   };
@@ -114,7 +129,7 @@ const LoginModal = ({ setIsAuthenticated }) => {
             </div>
           </form>
 
-          <div className={styles["container-rg"] }>
+          <div className={styles["container-rg"]}>
             <div className={styles.google}>
               <GoogleLogin
                 clientId={GOOGLE_ID}

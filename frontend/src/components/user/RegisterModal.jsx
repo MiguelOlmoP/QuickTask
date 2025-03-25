@@ -27,7 +27,7 @@ const RegisterModal = ({ setIsAuthenticated }) => {
     if (!user || !email || !pass) {
       toast.error(`Por favor, escriba ${!user ? "el nombre de usuario" : !email ? "el correo electrónico" : "la contraseña"}`, { position: "top-right", autoClose: 3000, });
 
-    } else if(pass.length < 7){
+    } else if (pass.length < 7) {
       toast.error(`La contraseña debe tener al menos 7 caracteres`, { position: "top-right", autoClose: 3000, });
 
     } else if (pass != confirmPass) {
@@ -38,7 +38,8 @@ const RegisterModal = ({ setIsAuthenticated }) => {
         const response = await axios.post(`${BASE_URL}registro`, {
           'name': user,
           'email': email,
-          'password': pass
+          'password': pass,
+          'password2': confirmPass
         });
 
         if (response.data.status) {
@@ -50,8 +51,18 @@ const RegisterModal = ({ setIsAuthenticated }) => {
           toast.error(response.data.msg, { position: "top-right", autoClose: 3000, });
         }
       } catch (error) {
-        setError('Error al conectar con el servidor.');
-        console.error(error);
+        if (error.response) {
+          if (error.response.status === 422) {
+            toast.error("Por favor, corrige los errores en el formulario", { position: "top-right", autoClose: 3000, });
+            setError('Error de validación');
+            console.error(error);
+          }
+        } else {
+          toast.error("Error de conexión", { position: "top-right", autoClose: 3000, });
+          setError('Error de conexión');
+          console.error(error);
+        }
+
       }
     }
   }

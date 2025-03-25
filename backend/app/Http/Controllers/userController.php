@@ -6,16 +6,11 @@ use Illuminate\Http\Request;
 
 
 use App\Models\User;
-use Closure;
-use Google\Service\ServiceControl\Auth;
 use Illuminate\Support\Facades\Hash;
 
 use Tymon\JWTAuth\Facades\JWTAuth;
 
-use Laravel\Socialite\Facades\Socialite;
-
 use Google_Client;
-use PhpParser\Node\Stmt\TryCatch;
 
 class userController extends Controller
 {
@@ -33,6 +28,12 @@ class userController extends Controller
      */
     public function newUser(Request $request)
     {
+        $request->validate([
+            'name' => 'required',
+            'email' => 'required|email',
+            'password' => 'required|min:7',
+            'password2' => 'required|min:7|same:password'
+        ]);
         
         $existe = User::where('email', $request->email)->exists();
 
@@ -76,6 +77,11 @@ class userController extends Controller
      */
     public function userLogin(Request $request)
     {
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required|min:7'
+        ]);
+
         $user = User::where('email', $request->email)->first();
 
         $existe = false;
@@ -87,7 +93,6 @@ class userController extends Controller
                 $mensaje = "Has iniciado sesion correctamente.";
                 $token = JWTAuth::fromUser($user);
             } else {
-                $existe = false;
                 $mensaje = "El gmail y la contraseña no coinciden";
             }
         }
@@ -184,7 +189,11 @@ class userController extends Controller
     public function loginGoogle(Request $request)
     {
         try {
-            $googleToken = $request->input('token'); // Token enviado desde React (Google)
+            $request->validate([
+                'token' => 'required|string'
+            ]);
+
+            $googleToken = $request->input('token');
 
             $client = new Google_Client(['client_id' => env('GOOGLE_CLIENT_ID')]);
             $user = $client->verifyIdToken($googleToken);
