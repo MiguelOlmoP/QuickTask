@@ -47,6 +47,8 @@ QuickTask es una aplicación web diseñada para gestionar tareas de manera efici
         -> GOOGLE_CLIENT_SECRET: Clave secreta del cliente de Google.
         -> GOOGLE_REDIRECT_URI: URL de redirección configurada en Google para la autenticación.
 
+        -> BREVO_API_KEY=Api_Key
+
     3. Instalar y configurar JWT (si no está instalado)
 
         -> composer require tymon/jwt-auth  
@@ -60,6 +62,19 @@ QuickTask es una aplicación web diseñada para gestionar tareas de manera efici
         -> Obtén el Client ID y Client Secret en la sección de Credenciales.
         -> Luego, agrega esos valores en el archivo .env bajo las variables GOOGLE_CLIENT_ID y GOOGLE_CLIENT_SECRET.
         -> Configurar la URL de redirección (GOOGLE_REDIRECT_URI) para que apunte a la ruta de tu aplicación donde recibirás la respuesta de Google después de la autenticación.
+
+    5. Configuracion envio de correo electronico (Brevo)
+
+        -> Crea una cuenta en [Brevo](https://www.brevo.com)
+        -> Generar la clave API en Brevo:
+            * Ve a la sección "SMTP & API" en el menú de configuración
+            * En la pestaña "API Keys", haz clic en el botón "Create a New Key"
+            * Copia la clave API que se genera, ya que la necesitarás para tu archivo .env
+        -> Instalar el paquete de Brevo en Laravel 
+            * composer require getbrevo/brevo-php
+        -> Abre el archivo .env de tu proyecto y agrega la siguiente línea con la clave API que copiaste de Brevo
+            * BREVO_API_KEY=tu_clave_api        
+
   ```
 
 ### 🎨 Configuración del __Frontend__:
